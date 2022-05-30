@@ -11,6 +11,14 @@ inputs:
    jira_url:
       description: "Jira url"
       required: true
+      
+outputs:
+   jira_key_by_commit:
+      description: Jira issue key found on commit message.
+      value: ${{ steps.jira-key-by-commit.outputs.issue }}      
+   jira_key_by_branch:
+      description: Jira issue key found on commit message.
+      value: ${{ steps.jira-key-by-branch-name.outputs.issue }}
    
 runs:
   using: "composite"
@@ -39,8 +47,8 @@ runs:
       id: jira-key-by-branch-name
       shell: bash
       run: |
-         if [[ "${GITHUB_REF#refs/heads/}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
-           keys=$(echo "${GITHUB_REF#refs/heads/}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
+         if [[ "${{ github.ref }}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
+           keys=$(echo "${{ github.ref }}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
            while IFS='/| ' read -ra KEYS; do
              for issueKey in "${KEYS[@]}"; do
                echo "Run search for: $issueKey"
