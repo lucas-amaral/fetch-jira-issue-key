@@ -1,0 +1,43 @@
+name: "Get Jira Issue Key"
+description: "Find the Jira Issue Key by commit or PR name"
+   
+runs:
+  using: "composite"
+  steps:
+    - name: Find Jira issue key in commit messages
+      id: jira-key-by-commit
+      run: |
+         if [[ "${{ github.event.head_commit.message }}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
+           keys=$(echo "${{ github.event.head_commit.message }}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
+           while IFS='/| ' read -ra KEYS; do
+             for issueKey in "${KEYS[@]}"; do
+               echo "Run search for: $issueKey"
+               curl -D- -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} -H "Content-Type: application/json" "${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
+               key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
+               if [ "$key" != null ]; then
+                   echo "Jira key found: $key"
+                   echo "::set-output name=issue::$key"
+                   exit
+               fi
+             done
+           done <<< "$keys"
+         fi
+         
+     - name: Find Jira issue key in branch name
+      id: jira-key-by-branch-name
+      run: |
+         if [[ "${GITHUB_REF#refs/heads/}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
+           keys=$(echo "${GITHUB_REF#refs/heads/}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
+           while IFS='/| ' read -ra KEYS; do
+             for issueKey in "${KEYS[@]}"; do
+               echo "Run search for: $issueKey"
+               curl -D- -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} -H "Content-Type: application/json" "${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
+               key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
+               if [ "$key" != null ]; then
+                   echo "Jira key found: $key"
+                   echo "::set-output name=issue::$key"
+                   exit
+               fi
+             done
+           done <<< "$keys"
+         fi
