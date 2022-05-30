@@ -21,8 +21,8 @@ if [[ $MESSAGE =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
    while IFS='/| ' read -ra KEYS; do
      for issueKey in "${KEYS[@]}"; do
        echo "Run search for: $issueKey"
-       $(get_jira_ticket $issueKey)
-       $(set_issue_key_if_exist $issueKey)
+       get_jira_ticket "$issueKey"
+       set_issue_key_if_exist "$issueKey"
      done
    done <<< "$keys"
  fi
