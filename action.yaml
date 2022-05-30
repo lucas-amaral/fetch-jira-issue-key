@@ -6,6 +6,7 @@ runs:
   steps:
     - name: Find Jira issue key in commit messages
       id: jira-key-by-commit
+      shell: bash
       run: |
          if [[ "${{ github.event.head_commit.message }}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
            keys=$(echo "${{ github.event.head_commit.message }}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
@@ -25,6 +26,7 @@ runs:
          
      - name: Find Jira issue key in branch name
       id: jira-key-by-branch-name
+      shell: bash
       run: |
          if [[ "${GITHUB_REF#refs/heads/}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
            keys=$(echo "${GITHUB_REF#refs/heads/}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
