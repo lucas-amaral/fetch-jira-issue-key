@@ -5,6 +5,7 @@ function get_jira_ticket() {
 }
 
 function set_issue_key_if_exist() {
+   issueKey="$1"
    key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
    if [ "$key" != null ]; then
      echo "Jira key found: $issueKey"
@@ -19,8 +20,8 @@ if [[ $MESSAGE =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
    while IFS='/| ' read -ra KEYS; do
      for issueKey in "${KEYS[@]}"; do
        echo "Run search for: $issueKey"
-       "$(get_jira_ticket)"
-       "$(set_issue_key_if_exist)"
+       $(get_jira_ticket)
+       $(set_issue_key_if_exist $issueKey)
      done
    done <<< "$keys"
  fi
