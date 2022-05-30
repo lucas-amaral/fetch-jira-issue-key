@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 # while getopts u:p:j:m: flag
 # do
 #     case "${flag}" in
