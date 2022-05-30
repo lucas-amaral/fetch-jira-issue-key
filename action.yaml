@@ -47,8 +47,8 @@ runs:
       id: jira-key-by-branch-name
       shell: bash
       run: |
-         if [[ "${{ github.ref }}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
-           keys=$(echo "${{ github.ref }}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
+         if [[ "${{ github.event.head.ref }}" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
+           keys=$(echo "${{ github.event.head.ref }}" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
            while IFS='/| ' read -ra KEYS; do
              for issueKey in "${KEYS[@]}"; do
                echo "Run search for: $issueKey"
