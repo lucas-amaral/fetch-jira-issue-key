@@ -35,7 +35,7 @@ runs:
            done <<< "$keys"
          fi
          
-     - name: Find Jira issue key in branch name
+    - name: Find Jira issue key in branch name
       id: jira-key-by-branch-name
       shell: bash
       run: |
