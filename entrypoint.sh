@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 
-while getopts u:p:j:m: flag
-do
-    case "${flag}" in
-        u) user=${OPTARG};;
-        p) password=${OPTARG};;
-        j) jira_base_url=${OPTARG};;
-        m) message=${OPTARG};;
-    esac
-done
+# while getopts u:p:j:m: flag
+# do
+#     case "${flag}" in
+#         u) user=${OPTARG};;
+#         p) password=${OPTARG};;
+#         j) jira_base_url=${OPTARG};;
+#         m) message=${OPTARG};;
+#     esac
+# done
+
+set user="$1"
+set password="$2"
+set jira_base_url="$3"
+set message="$4"
 
 if [[ "$message" =~ [a-zA-Z0-9]+-[0-9]+ ]]; then
    keys=$(echo "$message" | grep -P '[a-zA-Z0-9]+-[0-9]+' -o)
