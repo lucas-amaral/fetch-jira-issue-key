@@ -1,5 +1,16 @@
 name: "Get Jira Issue Key"
 description: "Find the Jira Issue Key by commit or PR name"
+
+inputs:
+   jira_user:
+      description: "Jira username"
+      required: true      
+   jira_password:
+      description: "Jira user password"
+      required: true    
+   jira_url:
+      description: "Jira url"
+      required: true
    
 runs:
   using: "composite"
@@ -13,7 +24,7 @@ runs:
            while IFS='/| ' read -ra KEYS; do
              for issueKey in "${KEYS[@]}"; do
                echo "Run search for: $issueKey"
-               curl -D- -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} -H "Content-Type: application/json" "${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
+               curl -D- -u ${{ inputs.jira_user }}:${{ inputs.jira_password }} -H "Content-Type: application/json" "${{ inputs.jira_url }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
                key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
                if [ "$key" != null ]; then
                    echo "Jira key found: $key"
@@ -33,7 +44,7 @@ runs:
            while IFS='/| ' read -ra KEYS; do
              for issueKey in "${KEYS[@]}"; do
                echo "Run search for: $issueKey"
-               curl -D- -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} -H "Content-Type: application/json" "${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
+               curl -D- -u ${{ inputs.jira_user }}:${{ inputs.jira_password }} -H "Content-Type: application/json" "${{ inputs.jira_url }}/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json             
                key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
                if [ "$key" != null ]; then
                    echo "Jira key found: $key"
