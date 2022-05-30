@@ -27,7 +27,7 @@ runs:
       id: jira-key-by-commit
       shell: bash
       run: |
-         bash $GITHUB_ACTION_PATH/entrypoint.sh "${{ inputs.jira_user }}" -p "${{ inputs.jira_password }}" -j "${{ inputs.jira_url }}" -m "${{ github.event.head_commit.message }}"
+         bash $GITHUB_ACTION_PATH/entrypoint.sh '${{ inputs.jira_user }}' '${{ inputs.jira_password }}' '${{ inputs.jira_url }}' '${{ github.event.head_commit.message }}'
          
     - name: Find Jira issue key in branch name
       id: jira-key-by-branch-name
