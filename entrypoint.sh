@@ -2,7 +2,7 @@
 
 function get_jira_ticket() {
     issueKey="$1"
-    curl -D- -u $JIRA_USER:$JIRA_PASSWORD -H "Content-Type: application/json" "$JIRA_BASE_URL/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json
+    curl -D- -u $JIRA_USER:$JIRA_PASSWORD -H "Accept: application/json" "$JIRA_BASE_URL/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json
 }
 
 function set_issue_key_if_exist() {
