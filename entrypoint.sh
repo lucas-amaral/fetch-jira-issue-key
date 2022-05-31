@@ -11,7 +11,7 @@ function set_issue_key_if_exist() {
     if [ "$key" != null ]; then
         echo "Jira key found: $issueKey"
         echo "::set-output name=issue::$issueKey"
-        exit
+#         exit
     fi
 }
 
