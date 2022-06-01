@@ -3,10 +3,12 @@
 function get_jira_ticket() {
     issueKey="$1"
     curl -D- -u $JIRA_USER:$JIRA_PASSWORD -H "Accept: application/json" "$JIRA_BASE_URL/rest/api/2/issue/picker?query=$issueKey" -o findjirakey.json
+    echo "$JIRA_BASE_URL/rest/api/2/issue/picker?query=$issueKey"
 }
 
 function set_issue_key_if_exist() {
     issueKey="$1"
+    echo "find"
     key=$(cat findjirakey.json | jq -c '.sections[0].issues[0].key')
     if [ "$key" != null ]; then
         echo "Jira key found: $issueKey"
